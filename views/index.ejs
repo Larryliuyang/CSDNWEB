@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style media="screen">
+
+      .messagebox{
+      border: 3px solid red;
+      height: 400px;
+      width: auto;
+      padding: 10px;
+      margin-top: 30px;
+      }
+
+      .board{
+      border: 3px solid red;
+      height: 300px;
+      width: auto;
+      }
+
+    </style>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="/socket.io/socket.io.js">
+
+    </script>
+
+
+  </head>
+  <body>
+
+
+    <% if(user){ %>
+  <nav>
+      <h3><%=user.loginname%> already logged in</h3>
+      <a href="/index/logout">Logout</a>
+  </nav>
+
+  </form>
+
+  <form class="" action="/index/updata_pwd" method="post">
+  <input type="text" name="loginname" placeholder="name to be changed" value="">
+  <input type="text" name="new_password" value="">
+  <input type="submit" name="" value="change!">
+  </form>
+
+
+    <% }else{ %>
+
+  <form class="" action="/index/login" method="post">
+    <input type="text" name="loginname" value="">
+    <input type="password" name="password" value="">
+    <input type="submit" name="" value="login">
+
+  </form>
+
+  <form class="" action="/index/reg" method="post">
+    <input type="text" name="loginname" value="">
+    <input type="password" name="password" value="">
+    <input type="password" name="confirm" value="">
+
+    <input type="submit" name="" value="register">
+  </form>
+
+  <% } %>
+
+  <hr>
+  <div class="messagebox">
+
+    <h4>Chat Box</h4>
+    <hr>
+    <div class="board">
+
+      <div class="list">
+
+      </div>
+
+
+    </div>
+    <!-- <form class="form" action="/users/submitmessage" method="post"> -->
+      <input class=typedInformation type="text" name="" value="" >
+      <!-- onchange="say(event)" -->
+      <input class="submitButton"type="submit" name="submit" value="SUBMIT MESSAGE">
+
+    <!-- </form> -->
+
+  </div>
+
+
+  <script type="text/javascript">
+
+  function createElement(htmlstr){
+    const div=document.createElement('div');
+    div.innerHTML=htmlstr;
+    return div.firstElementChild;
+  }
+   let ul=document.querySelector(".board");
+   const submitButton = document.querySelector(".submitButton")
+   const inputt =document.querySelector('.typedInformation')
+     const socket= io.connect();
+       const listdom=document.querySelector(".list")
+
+   submitButton.addEventListener('click',function(event){
+
+
+   socket.emit("say",inputt.value)
+        socket.on("newsay",word=>{
+          const pdom=document.createElement("p")
+          pdom.innerText=word
+          listdom.appendChild(pdom)
+        })
+
+
+  });
+
+
+      // function say(event){
+      //   socket.emit("say",event.target.value)
+      // }
+
+    </script>
+  </body>
+</html>
